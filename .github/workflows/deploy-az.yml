@@ -1,0 +1,14 @@
+name: Deploy to Azure
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  virtual_machine:
+    runs-on: ubuntu-18.04
+    steps:
+      - name: Prueba
+        run: |
+          echo "Esto es una prueba en github actions"
