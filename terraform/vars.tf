@@ -1,5 +1,5 @@
 variable "resource_group_name" {
-  default = "rg-createdbyTF"
+  default = "rg-caso-pracito-2"
 }
 
 variable "location_name" {
