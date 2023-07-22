@@ -1,0 +1,77 @@
+---
+
+- name: Instalamos diversas herramientas
+  hosts: web
+  remote_user: admin
+  become: true
+  tasks:
+    - name: Instalando herramientas
+      dnf:
+        name: '{{ item  }}'
+        state: present
+      with_items:
+        - podman
+        - skopeo
+        # - httpd
+        - httpd-tools
+        - openssl
+        - git
+        - python3
+    
+    - name: Paquete de python3
+      pip: 
+        name: passlib
+
+    - name: Clonamos repositorio
+      git:
+        dest: /home/azureuser/git
+        repo: https://github.com/JosephAndVit/caso_practico_2.git
+        clone: yes
+
+    - name: Creamos directorio
+      file:
+        path: /home/azureuser/webserver
+        state: directory
+
+    - name: Credenciales para autenticación
+      htpasswd:
+        path: /home/azureuser/webserver/.creds
+        name: joseph
+        password: 'abcd1234'
+        owner: azureuser
+        mode: 0640
+    
+    - name: Crear clave privada para el certificado
+      openssl_privatekey:
+        path: /home/azureuser/webserver/localhost.key
+        size: 2048
+        type: "RSA"
+        state: present
+
+    - name: Crear la petición de firma del certificado
+      openssl_csr:
+        path: /home/azureuser/webserver/localhost.csr
+        privatekey_path: /home/azureuser/webserver/localhost.key
+        common_name: vmcp2
+        country_name: ES
+        state_or_province_name: Madrid
+        locality_name: Madrid
+        organization_name: DevOps
+        organizational_unit_name: Ejemplo
+        state: present
+
+    - name: Crear certificado utilizando la clave privada y la petición de firma
+      openssl_certificate:
+        path: /home/azureuser/webserver/localhost.crt
+        privatekey_path: /home/azureuser/webserver/localhost.key
+        csr_path: /home/azureuser/webserver/localhost.csr
+        provider: selfsigned
+
+    - name: Movemos ficheros de la web al directorio
+      mv:
+        src: /home/azureuser/git/web/{{ item }}
+        dest: /home/azureuser/webserver/{{ item }}
+      with_items:
+        - file1.txt
+        - file2.txt
+        - file3.txt
