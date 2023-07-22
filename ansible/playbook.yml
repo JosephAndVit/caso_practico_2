@@ -68,10 +68,12 @@
         provider: selfsigned
 
     - name: Movemos ficheros de la web al directorio
-      mv:
+      copy:
         src: /home/azureuser/git/web/{{ item }}
         dest: /home/azureuser/webserver/{{ item }}
+        remote_src: true
       with_items:
-        - file1.txt
-        - file2.txt
-        - file3.txt
+        - index.html
+        - httpd.conf
+        - .htaccess
+        - Containerfile
