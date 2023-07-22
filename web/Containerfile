@@ -1,4 +1,5 @@
 FROM docker.io/httpd:latest
+RUN dnf install -y httpd
 COPY index.html /usr/local/apache2/htdocs/
 COPY .htaccess /usr/local/apache2/htdocs/
 COPY httpd.conf /usr/local/apache2/conf/
