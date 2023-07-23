@@ -12,7 +12,7 @@
       with_items:
         - podman
         - skopeo
-        # - httpd
+        - httpd
         - httpd-tools
         - openssl
         - git
@@ -67,7 +67,7 @@
         csr_path: /home/azureuser/webserver/localhost.csr
         provider: selfsigned
 
-    - name: Movemos ficheros de la web al directorio
+    - name: Copiamos los ficheros de la web al directorio
       copy:
         src: /home/azureuser/git/web/{{ item }}
         dest: /home/azureuser/webserver/{{ item }}
@@ -77,3 +77,8 @@
         - httpd.conf
         - .htaccess
         - Containerfile
+
+    - name: Build a basic OCI image
+      podman_image:
+        name: webserver
+        path: /home/azureuser/webserver
