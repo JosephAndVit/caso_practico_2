@@ -81,3 +81,14 @@
       podman_image:
         name: webserver
         path: /home/azureuser/webserver
+
+    - name: Etiquetar la imagen del contenedor
+      command: podman tag localhost/webserver:latest acrcp2josephandrade.azurecr.io/casopractico2:TAG
+      become: true
+
+    - name: Autenticarse en el Registry
+      podman_login:
+        username: acrcp2josephandrade
+        password: 'wkhPmYpcPQI0itKJYLYChh2RLkAJHU41BhoQ3ObRea+ACRDDyZR8'
+        registry: acrcp2josephandrade.azurecr.io
+      become: true
