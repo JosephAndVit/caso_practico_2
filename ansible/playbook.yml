@@ -87,7 +87,7 @@
       become: true
 
     - name: Autenticarse en el Registry
-      podman_login:
+      containers.podman.podman_login:
         username: acrcp2josephandrade
         password: 'wkhPmYpcPQI0itKJYLYChh2RLkAJHU41BhoQ3ObRea+ACRDDyZR8'
         registry: acrcp2josephandrade.azurecr.io
