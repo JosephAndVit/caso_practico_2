@@ -12,7 +12,6 @@
       with_items:
         - podman
         - skopeo
-        - httpd
         - httpd-tools
         - openssl
         - git
@@ -78,7 +77,7 @@
         - .htaccess
         - Containerfile
 
-    - name: Build a basic OCI image
+    - name: Generar la imagen del contenedor
       podman_image:
         name: webserver
         path: /home/azureuser/webserver
