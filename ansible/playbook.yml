@@ -35,7 +35,7 @@
     - name: Credenciales para autenticación
       htpasswd:
         path: /home/azureuser/webserver/.creds
-        name: joseph
+        name: webUser
         password: 'abcd1234'
         owner: azureuser
         mode: 0640
@@ -60,11 +60,12 @@
         state: present
 
     - name: Crear certificado utilizando la clave privada y la petición de firma
-      openssl_certificate:
-        path: /home/azureuser/webserver/localhost.crt
-        privatekey_path: /home/azureuser/webserver/localhost.key
-        csr_path: /home/azureuser/webserver/localhost.csr
-        provider: selfsigned
+      # openssl_certificate:
+      #   path: /home/azureuser/webserver/localhost.crt
+      #   privatekey_path: /home/azureuser/webserver/localhost.key
+      #   csr_path: /home/azureuser/webserver/localhost.csr
+      #   provider: selfsigned
+      command: openssl x509 -signkey /home/azureuser/webserver/localhost.key -in /home/azureuser/webserver/localhost.csr -req -days 365 -out /home/azureuser/webserver/localhost.crt
 
     - name: Copiamos los ficheros de la web al directorio
       copy:
@@ -84,11 +85,35 @@
 
     - name: Etiquetar la imagen del contenedor
       command: podman tag localhost/webserver:latest acrcp2josephandrade.azurecr.io/casopractico2:TAG
-      become: true
 
-    - name: Autenticarse en el Registry
-      containers.podman.podman_login:
+    - name: Subir la imagen del contenedor al Registry
+      podman_image:
+        name: acrcp2josephandrade.azurecr.io/casopractico2
+        tag: TAG
+        push: true
         username: acrcp2josephandrade
-        password: 'wkhPmYpcPQI0itKJYLYChh2RLkAJHU41BhoQ3ObRea+ACRDDyZR8'
-        registry: acrcp2josephandrade.azurecr.io
-      become: true
+        password: 'dWGdlLRnI0AYMOe2b9yj97gEu5IchPl+hy7Q9E0tAp+ACRD/jz5X'
+        push_args:
+          dest: acrcp2josephandrade.azurecr.io
+
+    - name: Crear el contenedor del servicio Web
+      command: podman create --name web -p 8080:443 localhost/webserver
+
+    - name: Generar los ficheros para gestionar el contenedor a través de systemd
+      command: podman generate systemd --new --files --name web
+
+    - name: Copiar el container-web.service al directorio de systemd
+      copy:
+        src: /home/azureuser/container-web.service
+        dest: /etc/systemd/system/container-web.service
+        remote_src: true
+
+    - name: Recargar la configuración de systemd
+      systemd:
+        daemon_reload: true
+
+    - name: Iniciar la aplicación Web desde systemd
+      systemd:
+        enabled: true
+        name: container-web.service
+        state: restarted
