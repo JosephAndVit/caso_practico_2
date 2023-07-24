@@ -1,3 +1,9 @@
+# Grupo de recursos
+resource "azurerm_resource_group" "rg" {
+  name     = var.resource_group_name
+  location = var.location_name
+}
+
 # Imagen de la VM de la Máquina de Linux
 resource "azurerm_container_registry" "acr" {
   name                     = var.acr_name
@@ -57,6 +63,18 @@ resource "azurerm_network_security_group" "nsg" {
     protocol                   = "Tcp"
     source_port_range          = "*"
     destination_port_range     = "8080"
+    source_address_prefix      = "*"
+    destination_address_prefix = "*"
+  }
+
+  security_rule {
+    name                       = "httpsrule"
+    priority                   = 103
+    direction                  = "Inbound"
+    access                     = "Allow"
+    protocol                   = "Tcp"
+    source_port_range          = "*"
+    destination_port_range     = "443"
     source_address_prefix      = "*"
     destination_address_prefix = "*"
   }
@@ -132,4 +150,21 @@ resource "azurerm_linux_virtual_machine" "vm" {
   custom_data = filebase64("../config/vm.sh")
 
   depends_on = [ azurerm_marketplace_agreement.vm_azure ]
+}
+
+resource "azurerm_kubernetes_cluster" "aks" {
+  name                = var.aks_name
+  location            = azurerm_resource_group.rg.location
+  resource_group_name = azurerm_resource_group.rg.name
+  dns_prefix          = "dnscp2"
+
+  default_node_pool {
+    name       = "default"
+    node_count = 1
+    vm_size    = "Standard_D2_v2"
+  }
+
+  identity {
+    type = "SystemAssigned"
+  }
 }

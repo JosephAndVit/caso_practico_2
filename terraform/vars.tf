@@ -34,7 +34,6 @@ variable "vm_name" {
   default = "vm-cp2"
 }
 
-
-# https://github.com/ptaritepui/devops/blob/main/caso_practico/web_app/README.md
-
-# htpasswd -cBb .creds joseph abcd1234
+variable "aks_name" {
+  default = "aks-cp2"
+}
