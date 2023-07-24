@@ -1,0 +1,7 @@
+---
+
+- name: AKS CP2
+  hosts: localhost
+  tasks:
+    - name: Desplegamos aplicación 
+      command: kubectl create -f ../aks/playbook-aks.yaml

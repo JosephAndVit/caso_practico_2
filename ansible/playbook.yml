@@ -1,6 +1,6 @@
 ---
 
-- name: Instalamos diversas herramientas
+- name: Despliege de la Aplicación Web
   hosts: web
   remote_user: admin
   become: true
