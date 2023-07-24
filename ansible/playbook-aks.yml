@@ -1,0 +1,18 @@
+---
+
+- name: AKS CP2
+  hosts: localhost
+  tasks:
+    - name: Obtenemos credenciales del AKS
+      command: az aks get-credentials --resource-group rg-cp2 --name aks-cp2 --overwrite-existing
+
+    - name: Desplegamos aplicación 
+      command: kubectl create -f ../aks/hello-kubernetes.yaml
+
+    - name: Obtenemos la información del servicio
+      command: kubectl get services cp2-andvit -n cp2
+      register: services
+
+    - name: Mostramos la IP externa.
+      debug:
+        msg: "{{ services.stdout }}"

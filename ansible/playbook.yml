@@ -89,7 +89,7 @@
         tag: TAG
         push: true
         username: acrcp2josephandrade
-        password: '4e6LUds7p7YdsBGSnac7jdr897aK+Yrk9yikozbHQ0+ACRBO55nf'
+        password: 'jVsf7rVtQW6bcAnuauRoWXz0Imjw86iwJMAZZ28WLC+ACRBL5ib2'
         push_args:
           dest: acrcp2josephandrade.azurecr.io
 

@@ -26,16 +26,16 @@ spec:
         ports:
         - containerPort: 8080
 ---
-apiVersion: apps/v1
+apiVersion: v1
 kind: Service
 metadata:
-  name: cp2-joseph
+  name: cp2-andvit
   namespace: cp2
 spec:
   selector:
-    app: andvit-cp2
+    app: hello-world
   ports:
     - protocol: TCP
-      port: 80
-      targetPort: 80
+      port: 8080
+      targetPort: 8080
   type: LoadBalancer

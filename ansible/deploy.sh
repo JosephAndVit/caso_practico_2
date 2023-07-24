@@ -2,4 +2,4 @@
 ansible-playbook -i hosts playbook.yml
 
 # Despliege de aplicación en AKS
-ansible-playbook playbook-aks.yaml
+ansible-playbook playbook-aks.yml
