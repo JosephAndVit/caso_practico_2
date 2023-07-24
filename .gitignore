@@ -1,0 +1,2 @@
+# Dejamos de ratrear los ficheros de la carpeta .terraform
+*/.terraform/*
