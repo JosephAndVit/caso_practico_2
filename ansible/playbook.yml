@@ -37,15 +37,12 @@
         path: /home/azureuser/webserver/.creds
         name: webUser
         password: 'abcd1234'
-        owner: azureuser
         mode: 0640
     
     - name: Crear clave privada para el certificado
       openssl_privatekey:
         path: /home/azureuser/webserver/localhost.key
         size: 2048
-        type: "RSA"
-        state: present
 
     - name: Crear la petición de firma del certificado
       openssl_csr:
@@ -92,7 +89,7 @@
         tag: TAG
         push: true
         username: acrcp2josephandrade
-        password: 'dWGdlLRnI0AYMOe2b9yj97gEu5IchPl+hy7Q9E0tAp+ACRD/jz5X'
+        password: '4e6LUds7p7YdsBGSnac7jdr897aK+Yrk9yikozbHQ0+ACRBO55nf'
         push_args:
           dest: acrcp2josephandrade.azurecr.io
 

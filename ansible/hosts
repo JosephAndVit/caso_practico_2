@@ -1,5 +1,5 @@
 [web]
-20.117.135.43
+20.254.36.15
 
 [web:vars]
 ansible_user=azureuser
